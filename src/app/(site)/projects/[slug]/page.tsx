@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { destinationById } from "@/content/destinations";
 import { projectBySlug, projects } from "@/content/projects";
 import { ArchitectureDiagram } from "@/components/project/ArchitectureDiagram";
-import { ProjectVisual } from "@/components/project/ProjectVisual";
+import { ProjectImage } from "@/components/project/ProjectImage";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 
 export function generateStaticParams() {
@@ -59,7 +59,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
           )}
         </div>
         <div className="overflow-hidden rounded-2xl border border-line">
-          <ProjectVisual project={p} />
+          <ProjectImage project={p} priority />
         </div>
       </header>
 

@@ -146,7 +146,7 @@ export default function World() {
           <Beacon key={d.id} id={d.id} />
         ))}
       <AirTaxis animate={animate} />
-      <Nova />
+      {!useWorld.getState().poster && <Nova />}
 
       <Player />
       <LabelProjector />

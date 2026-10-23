@@ -9,7 +9,7 @@ export const contactSchema = z.object({
   budget: z.string().trim().max(60).optional().default(""),
   message: z.string().trim().min(20, "Please write at least 20 characters.").max(4000),
   /** Honeypot: real users never see or fill this. */
-  website: z.string().max(0).optional().default(""),
+  website: z.string().max(500).optional().default(""),
   /** Client timestamp when the form was rendered (bot time-trap). */
   startedAt: z.number().int().positive(),
 });

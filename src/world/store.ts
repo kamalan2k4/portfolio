@@ -9,6 +9,8 @@ type WorldState = {
   quality: QualityLevel;
   reducedMotion: boolean;
   ready: boolean;
+  /** Tooling: hides HUD and NOVA for capturing the hero poster (`/?poster=1#explore`). */
+  poster: boolean;
   /** The browser dropped the WebGL context (GPU reset, backgrounded tab on mobile). */
   contextLost: boolean;
   progress: number;
@@ -46,6 +48,7 @@ export const useWorld = create<WorldState>()((set, get) => ({
   quality: "balanced",
   reducedMotion: false,
   ready: false,
+  poster: false,
   contextLost: false,
   progress: 0,
   overlay: "none",

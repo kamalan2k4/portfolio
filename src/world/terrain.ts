@@ -216,6 +216,10 @@ export function isOpenGround(x: number, z: number, margin = 0) {
   if (riverDistance(x, z) < RIVER_HALF_WIDTH + 2.5 + margin) return false;
   if (Math.hypot(x, z) < PLAZA_RADIUS + 4 + margin) return false;
   for (const p of paths) if (segDistance(x, z, p.a, p.b).d < PATH_HALF_WIDTH + 2 + margin) return false;
-  for (const d of destinations) if (Math.hypot(x - d.position[0], z - d.position[1]) < PLATEAU_RADIUS + 2 + margin) return false;
+  for (const d of destinations) {
+    if (Math.hypot(x - d.position[0], z - d.position[1]) < PLATEAU_RADIUS + 2 + margin) return false;
+    // Keep each arrival viewpoint and its sight line to the landmark clear.
+    if (segDistance(x, z, d.viewpoint, d.position).d < 4.5 + margin) return false;
+  }
   return true;
 }

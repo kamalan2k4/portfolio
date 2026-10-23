@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Project } from "@/content/types";
-import { ProjectVisual } from "./ProjectVisual";
+import { ProjectImage } from "./ProjectImage";
 
 const ORIGIN: Record<Project["origin"], string> = {
   personal: "Independent build",
@@ -15,7 +15,7 @@ export function ProjectCard({ project, headingLevel = 3 }: { project: Project; h
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-night-2 transition-colors hover:border-line-strong">
       <div className="aspect-[16/10] overflow-hidden border-b border-line">
-        <ProjectVisual project={project} className="transition-transform duration-500 group-hover:scale-[1.03]" />
+        <ProjectImage project={project} className="transition-transform duration-500 group-hover:scale-[1.03]" />
       </div>
       <div className="flex flex-1 flex-col gap-3 p-5">
         <p className="eyebrow" style={{ color: project.accent }}>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Project } from "@/content/types";
 import { ArchitectureDiagram } from "@/components/project/ArchitectureDiagram";
-import { ProjectVisual } from "@/components/project/ProjectVisual";
+import { ProjectImage } from "@/components/project/ProjectImage";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 
 /** Compact in-world version of a project page. */
@@ -9,7 +9,7 @@ export function ProjectView({ project: p }: { project: Project }) {
   return (
     <div className="space-y-6">
       <div className="overflow-hidden rounded-xl border border-line">
-        <ProjectVisual project={p} />
+        <ProjectImage project={p} priority />
       </div>
       <p className="text-stone/85">{p.tagline}</p>
       <section className="rounded-xl border border-line p-4" style={{ background: `linear-gradient(135deg, ${p.accent}18, transparent 70%)` }}>

@@ -46,14 +46,16 @@ export function MapOverlay() {
             ))}
             <circle r="11" fill="#d5c9ad" fillOpacity="0.25" />
           </svg>
+          {/* Pointer shortcut; the list beside the map is the accessible equivalent. */}
           {destinations.map((d) => (
             <button
               key={d.id}
               type="button"
+              tabIndex={-1}
+              aria-hidden
               onClick={() => travelTo(d.id)}
               style={{ left: pct(d.position[0]), top: pct(d.position[1]) }}
               className="group absolute -translate-x-1/2 -translate-y-1/2 rounded-full p-1"
-              aria-label={`Travel to ${d.name}${nearby === d.id ? " (you are here)" : ""}`}
             >
               <span className="block h-4 w-4 rounded-full border-2 border-night shadow-lg transition-transform group-hover:scale-125" style={{ background: d.accent }} />
               <span className="pointer-events-none absolute top-full left-1/2 mt-0.5 -translate-x-1/2 whitespace-nowrap rounded bg-night/80 px-1.5 text-[11px] font-semibold">
@@ -68,8 +70,15 @@ export function MapOverlay() {
             <li key={d.id}>
               <button type="button" onClick={() => travelTo(d.id)} className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-stone/5">
                 <span aria-hidden className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: d.accent }} />
-                <span className="text-sm font-semibold">{d.name}</span>
-                {nearby === d.id && <span className="ml-auto text-xs text-aqua">Here</span>}
+                <span className="text-sm font-semibold">
+                  <span className="sr-only">Travel to </span>
+                  {d.name}
+                </span>
+                {nearby === d.id && (
+                  <span className="ml-auto text-xs text-aqua">
+                    <span className="sr-only">(</span>Here<span className="sr-only">)</span>
+                  </span>
+                )}
               </button>
             </li>
           ))}

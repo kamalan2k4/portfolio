@@ -115,6 +115,12 @@ export function Player() {
     const dt = Math.min(rawDt, 0.12);
     const s = state.current;
     const world = useWorld.getState();
+    if (world.poster) {
+      // Tooling: elevated establishing shot for the hero poster.
+      camera.position.set(-30, 30, 96);
+      camera.lookAt(6, 0, 0);
+      return;
+    }
 
     // Travel requests
     if (world.travel && world.travel.nonce !== lastNonce.current) {

@@ -34,8 +34,9 @@
   --color-coral: var(--coral);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
-  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-display), var(--font-body), ui-sans-serif, sans-serif;
+  /* Body text uses the platform UI font (no download); headings use Space Grotesk. */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, monospace;
 }
 
@@ -82,6 +83,9 @@ body {
     background: var(--glass);
     border: 1px solid var(--line);
     border-radius: var(--radius);
+  }
+  /* Frosted variant for HUD elements floating over the 3D world (blur is costly; use sparingly). */
+  .glass-blur {
     backdrop-filter: blur(14px) saturate(1.2);
     -webkit-backdrop-filter: blur(14px) saturate(1.2);
   }

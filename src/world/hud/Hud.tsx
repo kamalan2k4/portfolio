@@ -45,7 +45,7 @@ function TopBar({ onExit }: { onExit: () => void }) {
   const setQuality = useWorld((s) => s.setQuality);
   return (
     <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-3 sm:p-4">
-      <div className="pointer-events-auto glass hidden px-4 py-2 sm:block">
+      <div className="pointer-events-auto glass glass-blur hidden px-4 py-2 sm:block">
         <p className="eyebrow">You are at</p>
         <p className="font-display font-bold" aria-live="polite">
           {nearby ? destinationById(nearby).name : "The Eco-Park"}
@@ -149,7 +149,7 @@ function TourBar() {
   const id = tourOrder[tour.index];
   return (
     <div className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-center px-3">
-      <div role="region" aria-label="Guided tour" className="pointer-events-auto glass flex flex-wrap items-center gap-2 px-3 py-2">
+      <div role="region" aria-label="Guided tour" className="pointer-events-auto glass glass-blur flex flex-wrap items-center gap-2 px-3 py-2">
         <p className="px-2 text-sm">
           <span className="text-stone-dim">
             Tour {tour.index + 1}/{tourOrder.length} ·

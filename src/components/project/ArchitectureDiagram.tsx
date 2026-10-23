@@ -25,7 +25,7 @@ export function ArchitectureDiagram({ project }: { project: Project }) {
 
   return (
     <figure className="m-0">
-      <div className="overflow-x-auto rounded-xl border border-line bg-night/60">
+      <div tabIndex={0} role="region" aria-label={`${project.title} architecture diagram (scrollable)`} className="overflow-x-auto rounded-xl border border-line bg-night/60">
         <svg viewBox={`0 0 ${width} ${height}`} className="block h-auto min-w-[640px] w-full" role="img" aria-labelledby={`${marker}-title`}>
           <title id={`${marker}-title`}>{`${project.title} architecture`}</title>
           <defs>

@@ -12,13 +12,15 @@ import World from "./World";
 export default function WorldExperience({ capability, tour, onExit }: { capability: Capability; tour: boolean; onExit: () => void }) {
   const ready = useWorld((s) => s.ready);
   const contextLost = useWorld((s) => s.contextLost);
+  const poster = useWorld((s) => s.poster);
   const [generation, setGeneration] = useState(0);
   const root = useRef<HTMLDivElement>(null);
   const startedTour = useRef(false);
 
   useEffect(() => {
     performance.mark("world:mount");
-    useWorld.setState({ ...useWorld.getInitialState(), quality: capability.level, reducedMotion: capability.reducedMotion });
+    const poster = new URLSearchParams(location.search).has("poster");
+    useWorld.setState({ ...useWorld.getInitialState(), quality: poster ? "high" : capability.level, reducedMotion: capability.reducedMotion, poster });
     const prevOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
     root.current?.focus();
@@ -41,7 +43,7 @@ export default function WorldExperience({ capability, tour, onExit }: { capabili
   return (
     <div ref={root} tabIndex={-1} role="application" aria-roledescription="3D portfolio world" aria-label="Kamalan C S portfolio world. Use the Map or Ask NOVA buttons to navigate." className="fixed inset-0 z-50 bg-night outline-none">
       <World key={generation} />
-      <Hud onExit={onExit} touch={capability.coarsePointer} />
+      {!poster && <Hud onExit={onExit} touch={capability.coarsePointer} />}
       {contextLost && (
         <div role="alertdialog" aria-labelledby="ctx-title" className="absolute inset-0 z-10 grid place-items-center bg-night/90 p-6 text-center">
           <div className="max-w-sm">

@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "tsx scripts/gen-visuals.tsx",
+    "prebuild": "tsx scripts/gen-visuals.tsx",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -38,7 +40,9 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
     "jsdom": "^29.1.1",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^5.0.5"
   }

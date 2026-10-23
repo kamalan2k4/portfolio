@@ -5,7 +5,6 @@ import { achievements, profile } from "@/content/profile";
 import { projectBySlug, projects } from "@/content/projects";
 import type { ProjectCategory } from "@/content/types";
 import { ProjectCard } from "@/components/project/ProjectCard";
-import { HeroLandscape } from "@/components/home/HeroLandscape";
 import { WorldLauncher } from "@/components/home/WorldLauncher";
 import { SiteFooter } from "@/components/site/SiteFooter";
 
@@ -24,8 +23,23 @@ export default function Home() {
     <>
       <main id="main">
         <section aria-labelledby="hero-title" className="relative isolate flex min-h-[100svh] flex-col justify-end overflow-hidden">
-          <HeroLandscape className="absolute inset-0 -z-10 h-full w-full" />
-          <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-night via-night/40 to-transparent" />
+          {/* A real render of the 3D world (scripts/capture-hero.mjs); decorative. */}
+          <picture>
+            <source media="(max-aspect-ratio: 1/1)" srcSet="/media/hero/world-portrait-720.webp 720w, /media/hero/world-portrait-1080.webp 1080w" sizes="100vw" />
+            <img
+              src="/media/hero/world-1600.webp"
+              srcSet="/media/hero/world-1080.webp 1080w, /media/hero/world-1600.webp 1600w, /media/hero/world-2400.webp 2400w"
+              sizes="(max-aspect-ratio: 16/9) 178vh, 100vw"
+              alt=""
+              width={1600}
+              height={900}
+              fetchPriority="high"
+              decoding="async"
+              className="absolute inset-0 -z-10 h-full w-full object-cover object-[50%_40%]"
+            />
+          </picture>
+          <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-night via-night/55 to-night/10" />
+          <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-night/70 via-night/20 to-transparent" />
 
           <div className="mx-auto w-full max-w-6xl px-4 pb-14 sm:px-6 sm:pb-20">
             <p className="eyebrow">Portfolio · {profile.location}</p>

@@ -1,10 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import { profile } from "@/content/profile";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-const body = Inter({ variable: "--font-body", subsets: ["latin"], display: "swap" });
 const display = Space_Grotesk({ variable: "--font-display", subsets: ["latin"], display: "swap", weight: ["500", "700"] });
 
 export const metadata: Metadata = {
@@ -47,7 +46,7 @@ const personJsonLd = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${body.variable} ${display.variable} antialiased`}>
+    <html lang="en" className={`${display.variable} antialiased`}>
       <body className="min-h-dvh">
         <a href="#main" className="skip-link">
           Skip to content
