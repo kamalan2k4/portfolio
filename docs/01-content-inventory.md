@@ -67,15 +67,18 @@ I will **not** invent users, revenue, metrics, clients, testimonials, or feature
 and interviewers ask about anything on the page, so a claim that falls apart in either place costs you more than it gains.
 Tutorial-derived repos go on a "Lab" shelf, not the headline exhibits.
 
-## 5. Gaps — need your input
+## 5. Decisions (resolved 2026-10-23)
 
-1. **Work projects:** which repos (if any) came from your job/upskilling? Candidates: `helpdesk`, `vakeelsaab`, `Cognizant-JavaFSE-Upskilling` (renamed on site as "Java Full-Stack Upskilling" to avoid the company name), `fix-task-broken`.
-2. **Freelance/client work:** is `ibots` / `flexo-app` / `NestMakers` / `vakeelsaab` client work? Can the client be named? Any freelance rates, packages, availability?
-3. **Resume project "RAG-Based Technical Knowledge Assistant"** (FastAPI + HF + ChromaDB): which repo? `text_to_image_vector_search_using_chroma_db` looks closest. If none is public, I'll show it without a repo link.
-4. **csbros.in is down** (DNS/TLS). Fix the domain, or should Product City link to the GitHub release page until it's fixed? Pricing: is csbros free?
-5. **Private repos** (vinathi, vakeelsaab, helpdesk, ibots, flexo, csbros-companion, csbros-site): make public, or show "private — demo on request"?
-6. **Assets:** a professional photo? Screenshots/videos of VINATHI, LeadFlow, CSBROS (I can pull the csbros clips from the repo)?
-7. **Phone number:** show publicly or email-only?
-8. **Contact delivery:** Resend (free tier, needs an API key + verified sender) or another provider?
-9. **Hosting & domain:** Vercel? Custom domain?
-10. **GitHub repo for this portfolio:** name and visibility (e.g. public `kamalan2k4/portfolio`).
+- Work-derived repos (no employer named): `helpdesk`, `vakeelsaab`, `fix-task-broken` (shown as "Agent Benchmark Tasks").
+- Client work: `ibots`/`flexo-app`, `NestMakers`, `vakeelsaab`.
+- Private repos: shown as concept-framed exhibits with visuals; no repo links or access requests.
+- Resume project "RAG-Based Technical Knowledge Assistant" is shown from the resume description (no repo link).
+- csbros.in is down, so Product City links to the GitHub release; the product is free.
+- Phone hidden by default (`showPhone` in `profile.ts`).
+- Contact delivery via Resend (env vars), with a mailto fallback when unconfigured.
+- Repo: public `kamalan2k4/portfolio`; hosting: Vercel (domain to be chosen).
+
+### Still open
+- A professional photo (optional; the site doesn't need one).
+- Freelance rates or packages (Creator Bay lists services without prices).
+- Production domain (set `NEXT_PUBLIC_SITE_URL`).

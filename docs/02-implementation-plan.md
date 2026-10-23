@@ -4,8 +4,8 @@
 
 | Concern | Choice | Why |
 |---|---|---|
-| Framework | Next.js 15 App Router, React 19, TypeScript strict | SSG for every content page, route handlers for contact, image optimisation |
-| 3D | three r17x, @react-three/fiber 9, @react-three/drei 10 | R3F 9 is the React-19-compatible line |
+| Framework | Next.js 16 App Router (Cache Components), React 19, TypeScript strict | SSG for every content page, route handlers for contact, image optimisation |
+| 3D | three r186, @react-three/fiber 9.8, @react-three/drei 10 (PerformanceMonitor only) | R3F 9 is the React-19-compatible line |
 | Styling | Tailwind CSS 4 + CSS tokens | small CSS, design tokens shared by DOM UI |
 | State | zustand (scene ⇄ UI bridge, no per-frame React state) | subscribe-with-selector avoids re-renders |
 | Validation | zod (shared client/server) | contact + NOVA input |
@@ -54,7 +54,7 @@ eased camera fly-to, interaction cue rings + `E`/tap to open a DOM panel.
 
 | Budget | Target |
 |---|---|
-| Initial JS (route `/`, no 3D) | ≤ 110 KB gzip |
+| Initial JS (route `/`, no 3D) | ≤ 110 KB gzip, revised to ≤ 185 KB after measuring the Next 16 baseline (see 03-performance.md) |
 | 3D engine chunk (deferred) | ≤ 320 KB gzip |
 | World assets before first interaction | ≤ 1.5 MB desktop / ≤ 600 KB low-power |
 | Draw calls | ≤ 120 desktop / ≤ 60 low-power |
