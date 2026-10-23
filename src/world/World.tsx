@@ -90,6 +90,12 @@ export default function World() {
       shadows={q.shadows ? "percentage" : false}
       gl={{ antialias: q.antialias, powerPreference: "high-performance", stencil: false }}
       camera={{ fov: 62, near: 0.1, far: 1400, position: [0, 6, 58] }}
+      onCreated={({ gl }) => {
+        gl.domElement.addEventListener("webglcontextlost", (e) => {
+          e.preventDefault();
+          useWorld.setState({ contextLost: true });
+        });
+      }}
       aria-hidden
     >
       <PerformanceMonitor

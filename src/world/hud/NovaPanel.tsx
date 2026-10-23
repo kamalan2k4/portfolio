@@ -139,6 +139,8 @@ export function NovaPanel() {
           </label>
           <input
             id="nova-input"
+            // Sheet focuses this on open, so typing just works.
+            data-autofocus
             value={draft}
             onChange={(e) => {
               setDraft(e.target.value);

@@ -9,6 +9,8 @@ type WorldState = {
   quality: QualityLevel;
   reducedMotion: boolean;
   ready: boolean;
+  /** The browser dropped the WebGL context (GPU reset, backgrounded tab on mobile). */
+  contextLost: boolean;
   progress: number;
   overlay: Overlay;
   /** District whose information panel is open. */
@@ -44,6 +46,7 @@ export const useWorld = create<WorldState>()((set, get) => ({
   quality: "balanced",
   reducedMotion: false,
   ready: false,
+  contextLost: false,
   progress: 0,
   overlay: "none",
   panel: null,
