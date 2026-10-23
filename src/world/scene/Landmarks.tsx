@@ -1,8 +1,9 @@
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
-import { AdditiveBlending, Color, DoubleSide, type Group, type Mesh, ShaderMaterial } from "three";
+import { AdditiveBlending, Color, DoubleSide, type Group, type InstancedMesh, type Mesh, Object3D, ShaderMaterial } from "three";
 import { destinationById, destinations } from "@/content/destinations";
 import type { DistrictId } from "@/content/types";
+import { player } from "../input";
 import { useWorld } from "../store";
 import { registerColliders } from "../terrain";
 import { Batch, part, type Part, ring, useMaterial } from "./kit";
@@ -52,7 +53,7 @@ export function Beacon({ id }: { id: DistrictId }) {
         uniforms: { color: { value: new Color(d.accent) }, strength: { value: 0.35 } },
         vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
         fragmentShader: `uniform vec3 color; uniform float strength; varying vec2 vUv;
-          void main(){ float a = pow(1.0 - vUv.y, 1.6) * strength; gl_FragColor = vec4(color * a, a); }`,
+          void main(){ float a = smoothstep(0.0, 0.22, vUv.y) * pow(1.0 - vUv.y, 1.4) * strength; gl_FragColor = vec4(color * a, a); }`,
       }),
     [d.accent],
   );
@@ -60,13 +61,16 @@ export function Beacon({ id }: { id: DistrictId }) {
   useDispose(material);
   useFrame(() => {
     if (!mesh.current) return;
-    const target = useWorld.getState().highlight === id ? 1 : 0.32;
+    // Bright when it's the travel/tour target, faint up close so it never hides the landmark.
+    const dist = Math.hypot(d.position[0] - player.x, d.position[1] - player.z);
+    const near = Math.min(1, Math.max(0.15, (dist - 12) / 40));
+    const target = (useWorld.getState().highlight === id ? 1 : 0.4) * near;
     const u = (mesh.current.material as ShaderMaterial).uniforms.strength;
     u.value += (target - u.value) * 0.06;
   });
   return (
-    <mesh ref={mesh} position={[d.position[0], 30, d.position[1]]} material={material} renderOrder={2}>
-      <cylinderGeometry args={[0.9, 1.4, 60, 16, 1, true]} />
+    <mesh ref={mesh} position={[d.position[0], 40, d.position[1]]} material={material} renderOrder={2}>
+      <cylinderGeometry args={[0.9, 1.4, 80, 16, 1, true]} />
     </mesh>
   );
 }
@@ -132,14 +136,7 @@ export function Nexus({ shadows }: { shadows: boolean }) {
         <mesh rotation-x={-Math.PI / 2} material={holoMat}>
           <ringGeometry args={[1.3, 1.42, 64]} />
         </mesh>
-        {destinations
-          .filter((d) => d.id !== "nexus" && d.id !== "arrival")
-          .map((d) => (
-            <mesh key={d.id} position={[d.position[0] / 38, 0, d.position[1] / 38]}>
-              <sphereGeometry args={[0.09, 12, 8]} />
-              <meshBasicMaterial color={d.accent} toneMapped={false} />
-            </mesh>
-          ))}
+        <HoloDots />
       </group>
     </group>
   );
@@ -182,18 +179,28 @@ export function Citadel({ shadows }: { shadows: boolean }) {
   );
 }
 
-/** Placeholder monolith for districts whose full architecture arrives in a later stage. */
-export function DistrictMarker({ id, shadows }: { id: DistrictId; shadows: boolean }) {
-  const d = destinationById(id);
-  const handlers = useLandmarkHandlers(id);
-  useColliders([{ x: d.position[0], z: d.position[1], r: 2.2 }]);
-  const parts = useMemo<Part[]>(
-    () => [
-      part.cyl("stone", 2.6, 3, 0.8, 24, { p: [0, 0.4, 0] }),
-      part.box(`glass:${d.accent}`, [1.4, 6.4, 1.4], { p: [0, 4, 0] }),
-      part.octa(`glow:${d.accent}`, 0.6, { p: [0, 7.4, 0] }),
-    ],
-    [d.accent],
+/** District dots on the Nexus hologram: one instanced draw. */
+function HoloDots() {
+  const ref = useRef<InstancedMesh>(null);
+  const dots = destinations.filter((d) => d.id !== "nexus" && d.id !== "arrival");
+  useEffect(() => {
+    const m = ref.current;
+    if (!m) return;
+    const o = new Object3D();
+    const c = new Color();
+    dots.forEach((d, i) => {
+      o.position.set(d.position[0] / 38, 0, d.position[1] / 38);
+      o.updateMatrix();
+      m.setMatrixAt(i, o.matrix);
+      m.setColorAt(i, c.set(d.accent));
+    });
+    m.instanceMatrix.needsUpdate = true;
+    if (m.instanceColor) m.instanceColor.needsUpdate = true;
+  }, [dots]);
+  return (
+    <instancedMesh ref={ref} args={[undefined, undefined, dots.length]}>
+      <sphereGeometry args={[0.09, 12, 8]} />
+      <meshBasicMaterial toneMapped={false} />
+    </instancedMesh>
   );
-  return <Batch parts={parts} shadows={shadows} position={[d.position[0], PAD, d.position[1]]} {...handlers} />;
 }

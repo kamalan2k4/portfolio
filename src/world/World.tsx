@@ -8,8 +8,9 @@ import { QUALITY, stepDown } from "./quality";
 import { AirTaxis } from "./scene/AirTaxis";
 import { Forest } from "./scene/Forest";
 import { LabelProjector } from "./scene/Labels";
+import { AIDome, CreatorBay, InnovationDistrict, KnowledgeFalls, LaunchTerminal, ProductCity } from "./scene/Districts";
 import { MaterialsProvider } from "./scene/kit";
-import { ArrivalGate, Beacon, Citadel, DistrictMarker, Nexus } from "./scene/Landmarks";
+import { ArrivalGate, Beacon, Citadel, Nexus } from "./scene/Landmarks";
 import { Nova } from "./scene/Nova";
 import { COLORS, SUN_DIR } from "./scene/palette";
 import { Player } from "./scene/Player";
@@ -17,8 +18,6 @@ import { Sky } from "./scene/Sky";
 import { Terrain, Walkways } from "./scene/Terrain";
 import { River, Waterfall } from "./scene/Water";
 import { useWorld } from "./store";
-
-const BUILT = new Set(["arrival", "nexus", "citadel"]);
 
 /** Signals readiness after the first frames render, and freezes the static shadow map. */
 function FrameGate({ shadows }: { shadows: boolean }) {
@@ -48,6 +47,10 @@ function FrameGate({ shadows }: { shadows: boolean }) {
   useFrame(({ gl, scene }) => {
     if (!compiled) return;
     frames.current++;
+    if (frames.current === 90) {
+      const { render } = gl.info;
+      performance.mark("world:steady", { detail: { drawCalls: render.calls, triangles: render.triangles } });
+    }
     if (frames.current === 3) {
       if (shadows) {
         // Scenery never moves, so render the shadow map once and reuse it.
@@ -125,11 +128,12 @@ export default function World() {
       <ArrivalGate shadows={q.shadows} />
       <Nexus shadows={q.shadows} />
       <Citadel shadows={q.shadows} />
-      {destinations
-        .filter((d) => !BUILT.has(d.id))
-        .map((d) => (
-          <DistrictMarker key={d.id} id={d.id} shadows={q.shadows} />
-        ))}
+      <AIDome shadows={q.shadows} texScale={q.exhibitTexture} />
+      <InnovationDistrict shadows={q.shadows} texScale={q.exhibitTexture} />
+      <ProductCity shadows={q.shadows} texScale={q.exhibitTexture} />
+      <CreatorBay shadows={q.shadows} texScale={q.exhibitTexture} />
+      <KnowledgeFalls shadows={q.shadows} />
+      <LaunchTerminal shadows={q.shadows} />
       {destinations
         .filter((d) => d.id !== "nexus" && d.id !== "arrival")
         .map((d) => (

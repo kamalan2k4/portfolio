@@ -80,7 +80,8 @@ type T = { p?: [number, number, number]; r?: [number, number, number]; s?: [numb
 const m4 = new Matrix4();
 const q = new Quaternion();
 function place(geo: BufferGeometry, { p = [0, 0, 0], r = [0, 0, 0], s = [1, 1, 1] }: T) {
-  q.setFromEuler(new Euler(r[0], r[1], r[2]));
+  // YXZ: yaw first, then tilt/roll in the part's own frame.
+  q.setFromEuler(new Euler(r[0], r[1], r[2], "YXZ"));
   geo.applyMatrix4(m4.compose(new Vector3(...p), q, new Vector3(...s)));
   return geo;
 }

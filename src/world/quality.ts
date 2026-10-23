@@ -8,12 +8,14 @@ export type QualitySettings = {
   terrainSegments: number;
   trees: number;
   rocks: number;
+  /** Exhibit display texture scale (1 = 640×400). */
+  exhibitTexture: number;
 };
 
 export const QUALITY: Record<QualityLevel, QualitySettings> = {
-  high: { level: "high", dpr: [1, 1.75], antialias: true, shadows: true, terrainSegments: 200, trees: 900, rocks: 140 },
-  balanced: { level: "balanced", dpr: [1, 1.4], antialias: true, shadows: false, terrainSegments: 150, trees: 520, rocks: 80 },
-  low: { level: "low", dpr: [0.75, 1], antialias: false, shadows: false, terrainSegments: 96, trees: 220, rocks: 30 },
+  high: { level: "high", dpr: [1, 1.75], antialias: true, shadows: true, terrainSegments: 200, trees: 900, rocks: 140, exhibitTexture: 1 },
+  balanced: { level: "balanced", dpr: [1, 1.4], antialias: true, shadows: false, terrainSegments: 150, trees: 520, rocks: 80, exhibitTexture: 0.75 },
+  low: { level: "low", dpr: [0.75, 1], antialias: false, shadows: false, terrainSegments: 96, trees: 220, rocks: 30, exhibitTexture: 0.5 },
 };
 
 export type Capability = { webgl: boolean; level: QualityLevel; reducedMotion: boolean; coarsePointer: boolean; saveData: boolean };

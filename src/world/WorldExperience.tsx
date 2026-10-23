@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { resetInput } from "./input";
+import { disposeExhibitTextures } from "./scene/exhibitTexture";
 import type { Capability } from "./quality";
 import { Hud } from "./hud/Hud";
 import { useWorld } from "./store";
@@ -23,6 +24,7 @@ export default function WorldExperience({ capability, tour, onExit }: { capabili
       document.documentElement.style.overflow = prevOverflow;
       document.body.style.cursor = "";
       resetInput();
+      disposeExhibitTextures();
       useWorld.setState(useWorld.getInitialState());
     };
   }, [capability]);

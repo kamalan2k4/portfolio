@@ -51,7 +51,12 @@ function TourFooter() {
       <button type="button" className="btn btn-ghost" onClick={() => step(-1)} disabled={tour.index === 0}>
         Previous stop
       </button>
-      <button type="button" className="btn btn-primary" onClick={() => (last ? useWorld.getState().stopTour() : step(1))}>
+      <button type="button" className="btn btn-primary" onClick={() => {
+          if (!last) return step(1);
+          useWorld.getState().stopTour();
+          useWorld.getState().closeOverlay();
+        }}
+      >
         {last ? "Finish tour" : "Next stop →"}
       </button>
     </footer>
