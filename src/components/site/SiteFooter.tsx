@@ -18,7 +18,7 @@ export function SiteFooter() {
           <li><ExternalLink href={links.linkedin}>LinkedIn</ExternalLink></li>
           <li><ExternalLink href={links.leetcode}>LeetCode</ExternalLink></li>
           <li><ExternalLink href={links.blog}>Blog</ExternalLink></li>
-          <li><a className="hover:text-stone" href={`mailto:${profile.email}`}>Email</a></li>
+          <li><a className="text-aqua hover:text-stone" href={`mailto:${profile.email}`}>{profile.email}</a></li>
         </ul>
       </div>
     </footer>

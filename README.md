@@ -1,5 +1,7 @@
 # Kamalan C S · Explorable 3D Portfolio
 
+**Live:** https://kamalan-cs.vercel.app · **Contact:** [cskamalan@gmail.com](mailto:cskamalan@gmail.com)
+
 ![The eco-park world](public/media/hero/world-1600.webp)
 
 A portfolio you can walk through: a procedurally generated eco-park where each district holds part of my work.

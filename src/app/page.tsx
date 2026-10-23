@@ -48,6 +48,11 @@ export default function Home() {
             </h1>
             <p className="mt-3 font-display text-xl text-stone/90 sm:text-2xl">{profile.title}</p>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-stone/80">{profile.tagline}</p>
+            <p className="mt-4 text-base">
+              <a href={`mailto:${profile.email}`} className="link font-semibold">
+                {profile.email}
+              </a>
+            </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
               <WorldLauncher />
