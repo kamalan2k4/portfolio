@@ -136,6 +136,8 @@ export type Destination = {
   position: [number, number];
   /** Where the camera settles when travelling here. */
   viewpoint: [number, number];
+  /** Height on the landmark the camera aims at on arrival (default 4). */
+  lookHeight?: number;
   route: string;
   accent: string;
   icon: string;

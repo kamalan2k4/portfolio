@@ -2,6 +2,7 @@ import Link from "next/link";
 import { destinations } from "@/content/destinations";
 import { profile } from "@/content/profile";
 import { HeroLandscape } from "@/components/home/HeroLandscape";
+import { WorldLauncher } from "@/components/home/WorldLauncher";
 import { SiteFooter } from "@/components/site/SiteFooter";
 
 export default function Home() {
@@ -22,9 +23,7 @@ export default function Home() {
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-stone/80">{profile.tagline}</p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/projects" className="btn btn-primary">
-                Explore projects
-              </Link>
+              <WorldLauncher />
               <Link href="/resume" className="btn btn-ghost">
                 View resume
               </Link>

@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "check": "npm run lint && npm run typecheck && npm run test",
+    "measure:bundle": "node scripts/measure-bundle.mjs index recruiter projects/vinathi",
+    "e2e:world": "node scripts/world-flow.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",
