@@ -1,0 +1,203 @@
+@import "tailwindcss";
+
+/* ---------- Design tokens ---------- */
+:root {
+  --night: #07110d;
+  --night-2: #0c1a15;
+  --forest: #12271f;
+  --moss: #2f5d46;
+  --stone: #ece6d6;
+  --stone-dim: #b9b3a3;
+  --mist: #8fa39a;
+  --aqua: #7dd3c0;
+  --amber: #f2b45a;
+  --coral: #ff8a7a;
+  --line: rgb(236 230 214 / 0.12);
+  --line-strong: rgb(236 230 214 / 0.22);
+  --glass: rgb(10 22 18 / 0.72);
+  --glass-strong: rgb(8 18 14 / 0.88);
+  --focus: #ffd27a;
+  --radius: 14px;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-night: var(--night);
+  --color-night-2: var(--night-2);
+  --color-forest: var(--forest);
+  --color-moss: var(--moss);
+  --color-stone: var(--stone);
+  --color-stone-dim: var(--stone-dim);
+  --color-mist: var(--mist);
+  --color-aqua: var(--aqua);
+  --color-amber: var(--amber);
+  --color-coral: var(--coral);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), var(--font-body), ui-sans-serif, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, monospace;
+}
+
+/* ---------- Base ---------- */
+html {
+  background: var(--night);
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--night);
+  color: var(--stone);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgb(125 211 192 / 0.35);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------- Components ---------- */
+@layer components {
+  .glass {
+    background: var(--glass);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--aqua);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      transform 0.15s ease;
+    white-space: nowrap;
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn-primary {
+    background: var(--stone);
+    color: var(--night);
+  }
+  .btn-primary:hover {
+    background: #fff;
+  }
+  .btn-ghost {
+    border: 1px solid var(--line-strong);
+    color: var(--stone);
+    background: rgb(7 17 13 / 0.35);
+  }
+  .btn-ghost:hover {
+    border-color: var(--stone-dim);
+    background: rgb(236 230 214 / 0.06);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    font-size: 0.78rem;
+    color: var(--stone-dim);
+    background: rgb(236 230 214 / 0.03);
+  }
+
+  .link {
+    color: var(--aqua);
+    text-decoration: underline;
+    text-decoration-color: rgb(125 211 192 / 0.4);
+    text-underline-offset: 3px;
+  }
+  .link:hover {
+    text-decoration-color: var(--aqua);
+  }
+
+  .field {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.65rem 0.85rem;
+    border-radius: 10px;
+    border: 1px solid var(--line-strong);
+    background: rgb(7 17 13 / 0.6);
+    color: var(--stone);
+  }
+  .field::placeholder {
+    color: var(--mist);
+  }
+  .field:focus-visible {
+    outline-offset: 1px;
+  }
+
+  .prose-body p + p {
+    margin-top: 0.9rem;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  background: var(--stone);
+  color: var(--night);
+  font-weight: 600;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+
+@page {
+  margin: 12mm;
+}
