@@ -6,7 +6,15 @@ import type { Capability } from "@/world/quality";
 const load = () => import("@/world/WorldExperience");
 const WorldExperience = lazy(load);
 
-type Mode = { state: "idle" } | { state: "open"; capability: Capability; tour: boolean } | { state: "unsupported" } | { state: "failed" };
+/**
+ * Hero mode (the city game with licensed-character models) is for development only:
+ * on under `next dev`, or when NEXT_PUBLIC_HERO_GAME=1. Production builds compile it out.
+ */
+const HERO_GAME = process.env.NODE_ENV === "development" || process.env.NEXT_PUBLIC_HERO_GAME === "1";
+const loadGame = HERO_GAME ? () => import("@/game/GameExperience") : null;
+const GameExperience = loadGame ? lazy(loadGame) : null;
+
+type Mode = { state: "idle" } | { state: "open"; capability: Capability; tour: boolean; game?: boolean } | { state: "unsupported" } | { state: "failed" };
 
 class WorldBoundary extends Component<{ onError: () => void; children: ReactNode }, { failed: boolean }> {
   state = { failed: false };
@@ -26,7 +34,7 @@ class WorldBoundary extends Component<{ onError: () => void; children: ReactNode
 export function WorldLauncher() {
   const [mode, setMode] = useState<Mode>({ state: "idle" });
 
-  const enter = useCallback(async (tour: boolean) => {
+  const enter = useCallback(async (tour: boolean, game = false) => {
     performance.mark("world:request");
     const { detectCapability } = await import("@/world/quality");
     const capability = detectCapability();
@@ -34,7 +42,7 @@ export function WorldLauncher() {
       setMode({ state: "unsupported" });
       return;
     }
-    setMode({ state: "open", capability, tour });
+    setMode({ state: "open", capability, tour, game });
     if (location.hash !== "#explore") history.pushState({ world: true }, "", "#explore");
   }, []);
 
@@ -64,6 +72,11 @@ export function WorldLauncher() {
       <button type="button" className="btn btn-ghost" onClick={() => enter(true)} onPointerEnter={prefetch} onFocus={prefetch}>
         Guided tour
       </button>
+      {GameExperience && (
+        <button type="button" className="btn btn-ghost border-amber/60 text-amber" onClick={() => enter(false, true)} onPointerEnter={() => void loadGame?.()} onFocus={() => void loadGame?.()}>
+          Hero mode <span className="font-mono text-[10px] opacity-70">DEV</span>
+        </button>
+      )}
 
       {(mode.state === "unsupported" || mode.state === "failed") && (
         <p role="alert" className="w-full text-sm text-amber">
@@ -84,7 +97,7 @@ export function WorldLauncher() {
               </div>
             }
           >
-            <WorldExperience capability={mode.capability} tour={mode.tour} onExit={exit} />
+            {mode.game && GameExperience ? <GameExperience capability={mode.capability} onExit={exit} /> : <WorldExperience capability={mode.capability} tour={mode.tour} onExit={exit} />}
           </Suspense>
         </WorldBoundary>
       )}

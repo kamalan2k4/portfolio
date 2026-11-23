@@ -1,11 +1,13 @@
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
+
+export { useColliders };
 import { AdditiveBlending, Color, DoubleSide, type Group, type InstancedMesh, type Mesh, Object3D, ShaderMaterial } from "three";
 import { destinationById, destinations } from "@/content/destinations";
 import type { DistrictId } from "@/content/types";
 import { player } from "../input";
 import { useWorld } from "../store";
-import { registerColliders } from "../terrain";
+import { useColliders, useLayout, usePlacement } from "./placement";
 import { Batch, part, type Part, ring, useMaterial } from "./kit";
 import { useDispose } from "./useDispose";
 
@@ -33,16 +35,9 @@ export function useLandmarkHandlers(id: DistrictId) {
   );
 }
 
-/** Registers circular building footprints for the lifetime of the component. */
-export function useColliders(list: { x: number; z: number; r: number }[]) {
-  const key = JSON.stringify(list);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => registerColliders(list), [key]);
-}
-
 /** Soft vertical light beam marking a district on the horizon. */
 export function Beacon({ id }: { id: DistrictId }) {
-  const d = destinationById(id);
+  const d = { ...destinationById(id), ...usePlacement(id) };
   const material = useMemo(
     () =>
       new ShaderMaterial({
@@ -76,7 +71,7 @@ export function Beacon({ id }: { id: DistrictId }) {
 }
 
 export function ArrivalGate({ shadows }: { shadows: boolean }) {
-  const [x, z] = destinationById("arrival").position;
+  const [x, z] = usePlacement("arrival").position;
   const handlers = useLandmarkHandlers("arrival");
   useColliders([
     { x: x - 4.2, z, r: 1 },
@@ -101,7 +96,8 @@ export function Nexus({ shadows }: { shadows: boolean }) {
   const holo = useRef<Group>(null);
   const handlers = useLandmarkHandlers("nexus");
   const holoMat = useMaterial("glow:#7dd3c0");
-  useColliders([{ x: 0, z: 0, r: 2.6 }]);
+  const [nx, nz] = usePlacement("nexus").position;
+  useColliders([{ x: nx, z: nz, r: 2.6 }]);
   useFrame((_, dt) => {
     if (holo.current && !useWorld.getState().reducedMotion) holo.current.rotation.y += dt * 0.15;
   });
@@ -130,7 +126,7 @@ export function Nexus({ shadows }: { shadows: boolean }) {
     [],
   );
   return (
-    <group>
+    <group position={[nx, 0, nz]}>
       <Batch parts={parts} shadows={shadows} {...handlers} />
       <group ref={holo} position={[0, 2.6, 0]} {...handlers}>
         <mesh rotation-x={-Math.PI / 2} material={holoMat}>
@@ -143,7 +139,7 @@ export function Nexus({ shadows }: { shadows: boolean }) {
 }
 
 export function Citadel({ shadows }: { shadows: boolean }) {
-  const [x, z] = destinationById("citadel").position;
+  const [x, z] = usePlacement("citadel").position;
   const crown = useRef<Mesh>(null);
   const crownMat = useMaterial("glow:#f2b45a");
   const handlers = useLandmarkHandlers("citadel");
@@ -182,21 +178,27 @@ export function Citadel({ shadows }: { shadows: boolean }) {
 /** District dots on the Nexus hologram: one instanced draw. */
 function HoloDots() {
   const ref = useRef<InstancedMesh>(null);
+  const { place } = useLayout();
   const dots = destinations.filter((d) => d.id !== "nexus" && d.id !== "arrival");
+  // Fit the layout inside the hologram ring, whatever the world's scale.
+  const extent = Math.max(...dots.map((d) => Math.max(...place(d.id).position.map(Math.abs))));
+  const k = 1.2 / extent;
+  const centre = place("nexus").position;
   useEffect(() => {
     const m = ref.current;
     if (!m) return;
     const o = new Object3D();
     const c = new Color();
     dots.forEach((d, i) => {
-      o.position.set(d.position[0] / 38, 0, d.position[1] / 38);
+      const [px, pz] = place(d.id).position;
+      o.position.set((px - centre[0]) * k, 0, (pz - centre[1]) * k);
       o.updateMatrix();
       m.setMatrixAt(i, o.matrix);
       m.setColorAt(i, c.set(d.accent));
     });
     m.instanceMatrix.needsUpdate = true;
     if (m.instanceColor) m.instanceColor.needsUpdate = true;
-  }, [dots]);
+  }, [dots, place, k, centre]);
   return (
     <instancedMesh ref={ref} args={[undefined, undefined, dots.length]}>
       <sphereGeometry args={[0.09, 12, 8]} />

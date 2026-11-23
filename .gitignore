@@ -56,3 +56,6 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# dev-only hero models (fetched by scripts/fetch-hero-models.mjs, never committed)
+/public/dev-assets/

@@ -8,7 +8,8 @@ import { player } from "../input";
 import { useWorld } from "../store";
 import { exhibitTexture } from "./exhibitTexture";
 import { Batch, part, type Part, ring, useMaterial } from "./kit";
-import { PAD, useColliders, useLandmarkHandlers } from "./Landmarks";
+import { PAD, useLandmarkHandlers } from "./Landmarks";
+import { useColliders, usePlacement } from "./placement";
 import { useDispose } from "./useDispose";
 
 const LOAD_DISTANCE = 70;
@@ -16,14 +17,14 @@ type V3 = [number, number, number];
 
 /** Local frame of a district: centre on its plateau, facing its viewpoint. */
 function useDistrict(id: DistrictId) {
-  const d = destinationById(id);
+  const d = { ...destinationById(id), ...usePlacement(id) };
   const facing = Math.atan2(d.viewpoint[0] - d.position[0], d.viewpoint[1] - d.position[1]);
   return { d, facing, origin: [d.position[0], PAD, d.position[1]] as V3 };
 }
 
 /** Becomes true once the visitor first comes within range (distance-based loading). */
 function useApproached(id: DistrictId) {
-  const d = destinationById(id);
+  const d = usePlacement(id);
   const [near, setNear] = useState(false);
   const frame = useRef(0);
   useFrame(() => {
@@ -102,7 +103,7 @@ type Slot = { x: number; z: number; rot: number };
 function Exhibits({ id, slots, scale }: { id: DistrictId; slots: Slot[]; scale: number }) {
   const load = useApproached(id);
   const items = projectsIn(id);
-  const [cx, cz] = destinationById(id).position;
+  const [cx, cz] = usePlacement(id).position;
   useColliders(slots.map((s) => ({ x: cx + s.x, z: cz + s.z, r: 0.9 })));
   return (
     <>
