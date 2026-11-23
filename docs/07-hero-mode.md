@@ -3,7 +3,12 @@
 An explorable night city where visitors pick a hero (Spider-Man, Iron Man or Captain America), swing, fly or drive
 around, and open the same portfolio districts, NOVA and map as the eco-park.
 
-**Status:** code is in the repo but **disabled in production builds**. With the flag off, `next.config.ts` aliases
+**Status (2026-11-23): ON in production.** `NEXT_PUBLIC_HERO_GAME=1` is set for Production in Vercel, and the models
+are uploaded by CLI deploys (`npx vercel deploy --prod` from a machine that has run `scripts/fetch-hero-models.mjs`).
+The models are git-ignored, so a Git-triggered deploy would build the game but 404 on the models: keep deploying from
+the CLI, or host the `.glb` files elsewhere and point `model` in `src/game/heroes.ts` at them.
+
+**To turn it off:** remove `NEXT_PUBLIC_HERO_GAME` in Vercel and redeploy. With the flag off, `next.config.ts` aliases
 `@/game/GameExperience` to an empty stub, so no game code ships. It is always on under `npm run dev`.
 
 ## Run it locally
